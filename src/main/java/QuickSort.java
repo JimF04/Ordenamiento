@@ -1,32 +1,28 @@
+import java.util.Arrays;
 import java.util.Stack;
 
 public class QuickSort {
     public static void main(String[] args) {
-        int[] array1 = Main.randomArray(10000);
-        int[] array2 = Main.randomArray(100000);
-        int[] array3 = Main.randomArray(1000000);
+        int[] sizes = {10000, 100000, 250000, 500000, 1000000};
 
-        int numberOfExecutions = 15;
+        System.out.println("Quick Sort");
 
-        long totalTime1 = 0, totalTime2 = 0, totalTime3 = 0;
+        for (int size : sizes) {
+            int[] arr = Main.generateRandomArray(size);
+            long totalTime = 0;
 
-        for (int i = 0; i < numberOfExecutions; i++) {
-            totalTime1 += Main.measureTime(() -> quickSort(array1, 0, array1.length - 1));
+            for (int i = 0; i < 15; i++) {
+                int[] arrCopy = Arrays.copyOf(arr, arr.length); // Copiar el arreglo original
+                long startTime = System.currentTimeMillis();
+                quickSort(arrCopy,0, size-1); // Ordenar el arreglo copiado
+                long endTime = System.currentTimeMillis();
+                long executionTime = endTime - startTime;
+                totalTime += executionTime;
+            }
+
+            double averageTime = totalTime / 15.0; // Calcular el tiempo promedio
+            System.out.println("Tamaño del arreglo: " + size + " Tiempo promedio (ms): " + averageTime);
         }
-        long averageTime1 = totalTime1 / numberOfExecutions;
-        System.out.println("Tiempo promedio de ordenación para 10,000 elementos: " + averageTime1 + " milisegundos");
-
-        for (int i = 0; i < numberOfExecutions; i++){
-            totalTime2 += Main.measureTime(() -> quickSort(array2, 0, array2.length - 1));
-        }
-        long averageTime2 = totalTime2 / numberOfExecutions;
-        System.out.println("Tiempo promedio de ordenación para 100,000 elementos: " + averageTime2 + " milisegundos");
-
-        for (int i = 0; i < numberOfExecutions; i++){
-            totalTime3 += Main.measureTime(() -> quickSort(array3, 0, array3.length - 1));
-        }
-        long averageTime3 = totalTime3 / numberOfExecutions;
-        System.out.println("Tiempo promedio de ordenación para 1,000,000 elementos: " + averageTime3 + " milisegundos");
     }
     // method to find the partition position
     public static int partition(int array[], int low, int high) {

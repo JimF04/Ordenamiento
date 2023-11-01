@@ -2,71 +2,75 @@ import java.util.Arrays;
 
 public class radixSort {
     public static void main(String[] args) {
-        int[] array1 = Main.randomArray(10000);
-        int[] array2 = Main.randomArray(100000);
-        int[] array3 = Main.randomArray(1000000);
+        int[] sizes = {10000, 100000, 250000, 500000, 1000000};
 
-        int numberOfExecutions = 15;
+        System.out.println("Radix Sort");
 
-        long totalTime1 = 0, totalTime2 = 0, totalTime3 = 0;
+        for (int size : sizes) {
+            int[] arr = Main.generateRandomArray(size);
+            long totalTime = 0;
 
-        for (int i = 0; i < numberOfExecutions; i++) {
-            totalTime1 += Main.measureTime(() -> RadixSort(array1));
+            for (int i = 0; i < 15; i++) {
+                int[] arrCopy = Arrays.copyOf(arr, arr.length); // Copiar el arreglo original
+                long startTime = System.currentTimeMillis();
+                radixsort(arrCopy, size); // Ordenar el arreglo copiado
+                long endTime = System.currentTimeMillis();
+                long executionTime = endTime - startTime;
+                totalTime += executionTime;
+            }
+
+            double averageTime = totalTime / 15.0; // Calcular el tiempo promedio
+            System.out.println("Tamaño del arreglo: " + size + " Tiempo promedio (ms): " + averageTime);
         }
-        long averageTime1 = totalTime1 / numberOfExecutions;
-        System.out.println("Tiempo promedio de ordenación para 10,000 elementos: " + averageTime1 + " milisegundos");
-
-        for (int i = 0; i < numberOfExecutions; i++){
-            totalTime2 += Main.measureTime(() -> RadixSort(array2));
-        }
-        long averageTime2 = totalTime2 / numberOfExecutions;
-        System.out.println("Tiempo promedio de ordenación para 100,000 elementos: " + averageTime2 + " milisegundos");
-
-        for (int i = 0; i < numberOfExecutions; i++){
-            totalTime3 += Main.measureTime(() -> RadixSort(array3));
-        }
-        long averageTime3 = totalTime3 / numberOfExecutions;
-        System.out.println("Tiempo promedio de ordenación para 1,000,000 elementos: " + averageTime3 + " milisegundos");
-
     }
-    // Método para obtener el máximo valor en un array
-    public static int getMax(int arr[], int n) {
+    // A utility function to get maximum value in arr[]
+    static int getMax(int arr[], int n) {
         int mx = arr[0];
         for (int i = 1; i < n; i++)
             if (arr[i] > mx)
                 mx = arr[i];
         return mx;
     }
-    public static void countSort(int arr[], int n, int exp) {
-        int output[] = new int[n]; // Array de salida
+
+    // A function to do counting sort of arr[] according to
+    // the digit represented by exp.
+    static void countSort(int arr[], int n, int exp) {
+        int output[] = new int[n]; // output array
+        int i;
         int count[] = new int[10];
         Arrays.fill(count, 0);
 
-        // Almacena el recuento de ocurrencias en count[]
-        for (int i = 0; i < n; i++)
+        // Store count of occurrences in count[]
+        for (i = 0; i < n; i++)
             count[(arr[i] / exp) % 10]++;
 
-        // Ajusta el conteo para obtener las posiciones correctas en el array de salida
-        for (int i = 1; i < 10; i++)
+        // Change count[i] so that count[i] now contains
+        // the actual position of this digit in output[]
+        for (i = 1; i < 10; i++)
             count[i] += count[i - 1];
 
-        // Construye el array de salida
-        for (int i = n - 1; i >= 0; i--) {
-            int digit = (arr[i] / exp) % 10;
-            output[count[digit] - 1] = arr[i];
-            count[digit]--;
+        // Build the output array
+        for (i = n - 1; i >= 0; i--) {
+            output[count[(arr[i] / exp) % 10] - 1] = arr[i];
+            count[(arr[i] / exp) % 10]--;
         }
 
-        // Copia el array de salida a arr[], para que arr[] contenga los números ordenados según el dígito actual
-        System.arraycopy(output, 0, arr, 0, n);
+        // Copy the output array to arr[], so that arr[] now
+        // contains sorted numbers according to the current
+        // digit
+        for (i = 0; i < n; i++)
+            arr[i] = output[i];
     }
 
-    // Método principal para realizar el radix sort
-    public static void RadixSort(int arr[]) {
-        int n = arr.length;
+    // The main function to sort arr[] of
+    // size n using Radix Sort
+    static void radixsort(int arr[], int n) {
+        // Find the maximum number to know the number of digits
         int m = getMax(arr, n);
 
-        // Realiza counting sort para cada dígito. En lugar de pasar el número exacto, se pasa el lugar del dígito.
+        // Do counting sort for every digit. Note that
+        // instead of passing the digit number, exp is passed.
+        // exp is 10^i where i is the current digit number
         for (int exp = 1; m / exp > 0; exp *= 10)
             countSort(arr, n, exp);
     }

@@ -1,32 +1,28 @@
+import java.util.Arrays;
+
 public class BubbleSort {
 
     public static void main(String[] args) {
-        int[] array1 = Main.randomArray(10000);
-        int[] array2 = Main.randomArray(100000);
-        int[] array3 = Main.randomArray(1000000);
+        int[] sizes = {20000, 40000, 80000, 160000, 320000};
 
-        int numberOfExecutions = 15;
+        System.out.println("Bubble Sort");
 
-        long totalTime1 = 0, totalTime2 = 0, totalTime3 = 0;
+        for (int size : sizes) {
+            int[] arr = Main.generateRandomArray(size);
+            long totalTime = 0;
 
-        for (int i = 0; i < numberOfExecutions; i++) {
-            totalTime1 += Main.measureTime(() -> bubbleSort(array1, array1.length));
+            for (int i = 0; i < 15; i++) {
+                int[] arrCopy = Arrays.copyOf(arr, arr.length); // Copiar el arreglo original
+                long startTime = System.currentTimeMillis();
+                bubbleSort(arrCopy,size); // Ordenar el arreglo copiado
+                long endTime = System.currentTimeMillis();
+                long executionTime = endTime - startTime;
+                totalTime += executionTime;
+            }
+
+            double averageTime = totalTime / 15.0; // Calcular el tiempo promedio
+            System.out.println("Tamaño del arreglo: " + size + " Tiempo promedio (ms): " + averageTime);
         }
-        long averageTime1 = totalTime1 / numberOfExecutions;
-        System.out.println("Tiempo promedio de ordenación para 10,000 elementos: " + averageTime1 + " milisegundos");
-
-        for (int i = 0; i < numberOfExecutions; i++){
-            totalTime2 += Main.measureTime(() -> bubbleSort(array2, array2.length));
-        }
-        long averageTime2 = totalTime2 / numberOfExecutions;
-        System.out.println("Tiempo promedio de ordenación para 100,000 elementos: " + averageTime2 + " milisegundos");
-
-        for (int i = 0; i < numberOfExecutions; i++){
-            totalTime3 += Main.measureTime(() -> bubbleSort(array3, array3.length));
-        }
-        long averageTime3 = totalTime3 / numberOfExecutions;
-        System.out.println("Tiempo promedio de ordenación para 1,000,000 elementos: " + averageTime3 + " milisegundos");
-
     }
 
     static void bubbleSort(int arr[], int n)
