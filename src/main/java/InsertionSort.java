@@ -1,5 +1,3 @@
-import java.util.Arrays;
-
 public class InsertionSort {
     public static void main(String[] args) {
         int[] sizes = {20000, 40000, 80000, 160000, 320000};
@@ -7,13 +5,12 @@ public class InsertionSort {
         System.out.println("Insertion Sort");
 
         for (int size : sizes) {
-            int[] arr = Main.generateRandomArray(size);
             long totalTime = 0;
 
             for (int i = 0; i < 15; i++) {
-                int[] arrCopy = Arrays.copyOf(arr, arr.length); // Copiar el arreglo original
+                int[] arr = Main.generateRandomArray(size);
                 long startTime = System.currentTimeMillis();
-                insertionSort(arrCopy); // Ordenar el arreglo copiado
+                insertionSort(arr); // Ordenar el arreglo copiado
                 long endTime = System.currentTimeMillis();
                 long executionTime = endTime - startTime;
                 totalTime += executionTime;

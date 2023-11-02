@@ -1,5 +1,3 @@
-import java.util.Arrays;
-
 public class BubbleSort {
 
     public static void main(String[] args) {
@@ -8,13 +6,12 @@ public class BubbleSort {
         System.out.println("Bubble Sort");
 
         for (int size : sizes) {
-            int[] arr = Main.generateRandomArray(size);
             long totalTime = 0;
 
             for (int i = 0; i < 15; i++) {
-                int[] arrCopy = Arrays.copyOf(arr, arr.length); // Copiar el arreglo original
+                int[] arr = Main.generateRandomArray(size);
                 long startTime = System.currentTimeMillis();
-                bubbleSort(arrCopy,size); // Ordenar el arreglo copiado
+                bubbleSort(arr,size); // Ordenar el arreglo copiado
                 long endTime = System.currentTimeMillis();
                 long executionTime = endTime - startTime;
                 totalTime += executionTime;

@@ -2,18 +2,17 @@ import java.util.Arrays;
 
 public class radixSort {
     public static void main(String[] args) {
-        int[] sizes = {10000, 100000, 250000, 500000, 1000000};
+        int[] sizes = {10000, 100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000, 1000000};
 
         System.out.println("Radix Sort");
 
         for (int size : sizes) {
-            int[] arr = Main.generateRandomArray(size);
             long totalTime = 0;
 
             for (int i = 0; i < 15; i++) {
-                int[] arrCopy = Arrays.copyOf(arr, arr.length); // Copiar el arreglo original
+                int[] arr = Main.generateRandomArray(size);
                 long startTime = System.currentTimeMillis();
-                radixsort(arrCopy, size); // Ordenar el arreglo copiado
+                radixsort(arr, size); // Ordenar el arreglo copiado
                 long endTime = System.currentTimeMillis();
                 long executionTime = endTime - startTime;
                 totalTime += executionTime;

@@ -1,20 +1,16 @@
-import java.util.Arrays;
-import java.util.Stack;
-
 public class QuickSort {
     public static void main(String[] args) {
-        int[] sizes = {10000, 100000, 250000, 500000, 1000000};
+        int[] sizes = {10000, 100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000, 1000000};
 
         System.out.println("Quick Sort");
 
         for (int size : sizes) {
-            int[] arr = Main.generateRandomArray(size);
             long totalTime = 0;
 
             for (int i = 0; i < 15; i++) {
-                int[] arrCopy = Arrays.copyOf(arr, arr.length); // Copiar el arreglo original
+                int[] arr = Main.generateRandomArray(size);
                 long startTime = System.currentTimeMillis();
-                quickSort(arrCopy,0, size-1); // Ordenar el arreglo copiado
+                quickSort(arr,0, size-1); // Ordenar el arreglo copiado
                 long endTime = System.currentTimeMillis();
                 long executionTime = endTime - startTime;
                 totalTime += executionTime;
@@ -59,28 +55,19 @@ public class QuickSort {
         return (i + 1);
     }
 
-    public static void quickSort(int array[], int low, int high) {
-        Stack<Integer> stack = new Stack<>();
-        stack.push(low);
-        stack.push(high);
+    static void quickSort(int array[], int low, int high) {
+        if (low < high) {
 
-        while (!stack.isEmpty()) {
-            high = stack.pop();
-            low = stack.pop();
+            // find pivot element such that
+            // elements smaller than pivot are on the left
+            // elements greater than pivot are on the right
+            int pi = partition(array, low, high);
 
-            if (low < high) {
-                int pi = partition(array, low, high);
+            // recursive call on the left of pivot
+            quickSort(array, low, pi - 1);
 
-                if (pi - 1 > low) {
-                    stack.push(low);
-                    stack.push(pi - 1);
-                }
-
-                if (pi + 1 < high) {
-                    stack.push(pi + 1);
-                    stack.push(high);
-                }
-            }
+            // recursive call on the right of pivot
+            quickSort(array, pi + 1, high);
         }
     }
     // https://www.programiz.com/dsa/quick-sort
